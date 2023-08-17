@@ -10,6 +10,10 @@ urlpatterns = [
     path('cabinet', cabinetView, name='cabinet_url'),
     path('login', loginView, name='login_url'),
     path('logout', logoutView, name='logout_url'),
+    path('edit_profile', editProfileView, name='edit_profile_url'),
+    path('offers', offersView, name='offers_url'),
+    path('offers/<int:category_id>/', offersView, name='offers_url'),
+    path('offer/<int:offer_id>/', offerDetailView, name='offer_url'),
     
 ]
 

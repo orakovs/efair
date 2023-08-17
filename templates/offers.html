@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Кабинет{% endblock title %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h1>Categories</h1>
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'category_offers' category.id %}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <h1>Offers</h1>
+    {% if selected_category %}
+        <h2>Selected Category: {{ selected_category.name }}</h2>
+    {% endif %}
+    <ul>
+        {% for offer in offers %}
+            <li>{{ offer.title }} - {{ offer.description }} ({{ offer.category.name }})</li>
+        {% endfor %}
+    </ul>
+{% else %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h5>У вас нет доступа к кабинету, пожалуйста 
+                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0" href="{% url 'signup_url' %}">зарегестрируйтесь</a> или 
+                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0" href="{% url 'login_url' %}">авторизируйтесь!</a>
+            </h5>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -24,3 +24,5 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('iin', 'date_joined',)
 
 admin.site.register(CustomUser)
+admin.site.register(Category)
+admin.site.register(OfferSale)

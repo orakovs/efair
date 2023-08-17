@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Кабинет{% endblock title %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="#" class="btn btn-outline-dark">Создать предложение</a>
+                    </div>
+                    <!-- Здесь добавьте список ваших предложений -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{% static 'img/default_avatar.jpg' %}" class="card-img-top rounded-circle p-3" alt="Avatar">
+                <div class="card-body">
+                <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                <p class="card-text">Электронная почта: {{ user.email }}</p>
+                <p class="card-text">Страна: {{ user.country }}</p>
+                <p class="card-text">Город: {{ user.city }}</p>
+                <p class="card-text">Номер телефона: {{ user.phone }}</p>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'edit_profile_url' %}" class="btn btn-outline-dark">Редактировать профиль</a>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'admin:index' %}" class="btn btn-outline-dark">Панель администратора</a>
+                    {% endif %}
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h5>У вас нет доступа к кабинету, пожалуйста 
+                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0" href="{% url 'signup_url' %}">зарегестрируйтесь</a> или 
+                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0" href="{% url 'login_url' %}">авторизируйтесь!</a>
+            </h5>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
