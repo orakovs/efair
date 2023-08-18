@@ -17,7 +17,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         message='Номер телефона должен быть в международном формате: +77011234567'
     )
     phone = models.CharField(validators=[phone_regex], max_length=12)
-    avatar = models.ImageField(upload_to='static\profile_photo', default='img\default_avatar.jpg')
+    avatar = models.ImageField(upload_to='profile_photo', default='img/default_avatar.jpg')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -43,11 +43,12 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
     
     def __str__(self):
-        return self.category
+        return self.name
 
 
 class OfferSale(models.Model):
-    name = models.CharField(max_length=64)
+    title = models.CharField(max_length=64)
+    image = models.ImageField(upload_to='offer_image', default='img/no_item_image.jpg')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
     amount = models.PositiveIntegerField()
@@ -61,7 +62,7 @@ class OfferSale(models.Model):
         verbose_name_plural = 'Предложения'    
     
     def __str__(self):
-        return self.offer_name
+        return self.title
 
 
 class OfferBuy(models.Model):

@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.urls import reverse
 from .forms import *
 from .models import *
 
@@ -24,13 +26,22 @@ def offersView(request, category_id=None):
     categories = Category.objects.all()
     selected_category = None
     offers = OfferSale.objects.all()
+    
+    query = request.GET.get('q')
+    
+    if query:
+        offers = offers.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+    
     if category_id:
         selected_category = get_object_or_404(Category, pk=category_id)
         offers = offers.filter(category=selected_category)
     context = {
         'categories': categories,
         'offers': offers,
-        'selected_category': selected_category
+        'selected_category': selected_category,
+        'search_query': query
         }
     return render(request, 'offers.html', context)
 
