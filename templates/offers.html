@@ -3,7 +3,6 @@
 {% block title %}Кабинет{% endblock title %}
 
 {% block content %}
-{% if user.is_authenticated %}
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8">
@@ -14,88 +13,46 @@
                             <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="q" value="{{ search_query }}">
                             <button type="submit" class="btn btn-outline-primary">search</button>
                         </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        {% for offer in offers %}
-                        <div class="container">
-                            <div class="row">
-                                <div class="col">
-                                    <img src="{{ offer.image.url }}" class="rounded" alt="Offer_image" style="max-height: 50px">                                          
-                                </div>
-                                <div class="col-8">
-                                    <a
-                                </div>
-                            </div>
-                          </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
+                        <div class="d-grid gap-2">
+                            {% if selected_category %}
+                            <small>Выбранная категория: {{ selected_category.name }}</small>
+                            {% else %}
+                            <small>Выбранная категория: Все</small>
+                            {% endif %}
+                        </div>
                         {% for offer in offers %}
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-grid gap-2">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-ms">
-                                            </div>
-                                            <div class="col-ms">
-                                                <img src="{{ offer.image.url }}" class="img-fluid rounded" alt="Offer_image">                                          </div>
-                                            </div>
-                                          
-                                        </div>
-                                      </div>
-                                    
-                                </div>
-                                <div class="d-grid gap-2 col-md-8">
-
+                                    <ul class="list-unstyled">
+                                        <li class="list-group-item"><h5><a class="text-decoration-none" href="{% url 'offer_url' offer.id %}">{{ offer.title }}</a></h5></li>
+                                        <li class="list-group-item text-muted">Категория: {{ offer.category.name }}</li>
+                                        <li class="list-group-item">Количество: {{ offer.amount }}</li>
+                                        <li class="list-group-item">Стоимость: {{ offer.price }} тенге</li>
+                                        <li class="list-group-item">Продавец: {{ offer.salesman.first_name }} {{ offer.salesman.last_name }}</li>
+                                        <li class="list-group-item">Дата публикации: {{ offer.datetime }}</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
-
-<h1>Categories</h1>
-    <ul>
-        {% for category in categories %}
-            <li><a href="{% url 'offers_url' category.id %}">{{ category.name }}</a></li>
-        {% endfor %}
-            <li><a href="{% url 'offers_url' %}">Show All Categories</a></li>    </ul>
-
-    <h1>Offers</h1>
-    {% if selected_category %}
-        <h2>Selected Category: {{ selected_category.name }}</h2>
-    {% endif %}
-    <ul>
-        {% for offer in offers %}
-            <li>{{ offer.title }} - {{ offer.description }} ({{ offer.category.name }})</li>
-            <img src="{{ offer.image.url }}" class="card-img-top rounded-circle p-3" alt="Offer_image">
-        {% endfor %}
-    </ul>
-{% else %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <h5>У вас нет доступа к кабинету, пожалуйста 
-                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0" href="{% url 'signup_url' %}">зарегестрируйтесь</a> или 
-                <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0" href="{% url 'login_url' %}">авторизируйтесь!</a>
-            </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <h5>Категории</h5>
+                        {% for category in categories %}
+                        <li class="list-group-item"><a class="text-decoration-none" href="{% url 'offers_url' category.id %}">{{ category.name }}</a></li>
+                        {% endfor %}
+                        <li class="list-group-item"><a class="text-decoration-none" href="{% url 'offers_url' %}">Все категории</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-{% endif %}
 {% endblock %}

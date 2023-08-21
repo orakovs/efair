@@ -32,10 +32,10 @@
                 <label for="password" class="form-label">Пароль</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
-            <div class="d-flex">
-                <button type="submit" class="btn custom-btn btn-outline-dark me-2">Авторизоваться</button>
-                <button type="reset" class="btn custom-btn btn-outline-dark me-2">Сбросить</button>
-                <a href="{% url 'home_url' %}" class="btn custom-btn btn-outline-dark">Закрыть</a>      </form>
+            <div class="d-grid gap-2 mt-3">
+                <button type="submit" class="btn btn-outline-dark">Авторизоваться</button>
+                <button type="reset" class="btn btn-outline-dark">Сбросить</button>
+                <a href="{% url 'home_url' %}" class="btn btn-outline-dark">Закрыть</a>      </form>
             </div>
         </div>
     </div>

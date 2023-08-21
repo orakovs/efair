@@ -12,9 +12,11 @@ urlpatterns = [
     path('logout', logoutView, name='logout_url'),
     path('edit_profile', editProfileView, name='edit_profile_url'),
     path('offers/', offersView, name='offers_url'),
-    path('offers/<int:category_id>/', offersView, name='offers_url'),
-    path('offer/<int:offer_id>/', offerDetailView, name='offer_url'),
-    
+    path('offers/<int:category_id>', offersView, name='offers_url'),
+    path('offer/<int:offer_id>', offerDetailView, name='offer_url'),
+    path('create_offer', createOfferView, name='offer_create_url'),
+    path('edit_offer/<int:offer_id>', editOfferView, name='offer_edit_url'),
+    path('delete_offer/<int:offer_id>', deleteOfferView, name='offer_delete_url'),    
 ]
 
 if settings.DEBUG:

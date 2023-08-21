@@ -10,9 +10,25 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="#" class="btn btn-outline-dark">Создать предложение</a>
+                        <a href="{% url 'offer_create_url' %}" class="btn btn-outline-dark">Создать предложение</a>
                     </div>
-                    <!-- Здесь добавьте список ваших предложений -->
+                    {% if offers %}
+                    {% for offer in offers %}
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <ul class="list-unstyled">
+                                        <li class="list-group-item"><h5><a class="text-decoration-none" href="{% url 'offer_url' offer.id %}">{{ offer.title }}</a></h5></li>
+                                        <li class="list-group-item text-muted">Категория: {{ offer.category.name }}</li>
+                                        <li class="list-group-item">Количество: {{ offer.amount }}</li>
+                                        <li class="list-group-item">Стоимость: {{ offer.price }} тенге</li>
+                                        <li class="list-group-item">Дата публикации: {{ offer.datetime }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -20,17 +36,17 @@
             <div class="card">
                 <img src="{{ user.avatar.url }}" class="card-img-top rounded-circle p-3" alt="Avatar">
                 <div class="card-body">
-                <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
-                <p class="card-text">Электронная почта: {{ user.email }}</p>
-                <p class="card-text">Страна: {{ user.country }}</p>
-                <p class="card-text">Город: {{ user.city }}</p>
-                <p class="card-text">Номер телефона: {{ user.phone }}</p>
-                <div class="d-grid gap-2">
-                    <a href="{% url 'edit_profile_url' %}" class="btn btn-outline-dark">Редактировать профиль</a>
-                    {% if user.is_superuser %}
-                    <a href="{% url 'admin:index' %}" class="btn btn-outline-dark">Панель администратора</a>
-                    {% endif %}
-                </div>
+                    <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                    <p class="card-text">Электронная почта: {{ user.email }}</p>
+                    <p class="card-text">Страна: {{ user.country }}</p>
+                    <p class="card-text">Город: {{ user.city }}</p>
+                    <p class="card-text">Номер телефона: {{ user.phone }}</p>
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'edit_profile_url' %}" class="btn btn-outline-dark">Редактировать профиль</a>
+                            {% if user.is_superuser %}
+                            <a href="{% url 'admin:index' %}" class="btn btn-outline-dark">Панель администратора</a>
+                            {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

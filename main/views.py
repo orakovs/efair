@@ -15,9 +15,11 @@ def homeView(request):
 
 def cabinetView(request):
     user = request.user
+    offers = OfferSale.objects.filter(salesman=user).order_by('-datetime')
     context = {
         'user': user,
         'this_url': 'cabinet_url',
+        'offers': offers
     }
     return render(request, 'cabinet.html', context)
 
@@ -25,7 +27,7 @@ def cabinetView(request):
 def offersView(request, category_id=None):
     categories = Category.objects.all()
     selected_category = None
-    offers = OfferSale.objects.all()
+    offers = OfferSale.objects.all().order_by('-datetime')
     
     query = request.GET.get('q')
     
@@ -48,10 +50,46 @@ def offersView(request, category_id=None):
 
 def offerDetailView(request, offer_id):
     offer = get_object_or_404(OfferSale, pk=offer_id)
+    categories = Category.objects.all()
     context = {
-        'offer': offer
+        'offer': offer,
+        'categories': categories
         }
     return render(request, 'offer_detail.html', context)
+
+
+@login_required
+def createOfferView(request):
+    if request.method == 'POST':
+        form = OfferSaleCreationForm(request.POST)
+        if form.is_valid():
+            offer = form.save(commit=False)
+            offer.salesman = request.user
+            form.save()
+            return redirect('cabinet_url')
+    else:
+        form = OfferSaleCreationForm()
+    return render(request, 'offer_create.html', {'form': form,})
+
+
+def deleteOfferView(request, offer_id):
+    offer = get_object_or_404(OfferSale, pk=offer_id)
+    if request.method == 'POST':
+        offer.delete()
+        return redirect('offers_url')
+    return render(request, 'offer_delete.html', {'offer': offer})
+
+
+def editOfferView(request, offer_id):
+    offer = get_object_or_404(OfferSale, pk=offer_id)
+    if request.method == 'POST':
+        form = OfferSaleChangeForm(request.POST, instance=offer)
+        if form.is_valid():
+            form.save()
+            return redirect('offer_url', offer_id=offer_id)
+    else:
+        form = OfferSaleChangeForm(instance=offer)
+    return render(request, 'offer_edit.html', {'form': form, 'offer': offer})
 
 
 # все что связано с пользователем
@@ -112,8 +150,8 @@ def signupView(request):
         return redirect('login_url')
     
     else:
-        context = {'form': CustomUserCreationForm(), }
-        return render(request, 'signup.html', context)
+        form = CustomUserCreationForm()
+        return render(request, 'signup.html', {'form': form})
 
 @login_required
 def editProfileView(request):

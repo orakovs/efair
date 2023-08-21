@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from .models import CustomUser
+from django import forms
+from .models import *
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -12,3 +13,15 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ('first_name', 'last_name', 'email', 'country', 'city', 'phone', 'avatar')
+
+
+class OfferSaleCreationForm(forms.ModelForm):
+    class Meta:
+        model = OfferSale
+        fields = ['title', 'image', 'category', 'description', 'amount', 'price', 'in_activ']
+
+
+class OfferSaleChangeForm(forms.ModelForm):
+    class Meta:
+        model = OfferSale
+        fields = ['title', 'image', 'category', 'description', 'amount', 'price', 'in_activ']

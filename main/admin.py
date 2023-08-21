@@ -26,3 +26,4 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(CustomUser)
 admin.site.register(Category)
 admin.site.register(OfferSale)
+admin.site.register(OfferBuy)
