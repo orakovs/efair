@@ -6,22 +6,22 @@ from .models import *
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = ('iin', 'first_name', 'last_name', 'email', 'country', 'city', 'phone', 'avatar')
+        fields = ('iin', 'first_name', 'last_name', 'email', 'country', 'city', 'street', 'home_number', 'phone', 'avatar')
 
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('first_name', 'last_name', 'email', 'country', 'city', 'phone', 'avatar')
+        fields = ('first_name', 'last_name', 'email', 'country', 'city', 'street', 'home_number', 'phone', 'avatar')
 
 
 class OfferSaleCreationForm(forms.ModelForm):
     class Meta:
         model = OfferSale
-        fields = ['title', 'image', 'category', 'description', 'amount', 'price', 'in_activ']
+        fields = ['title', 'image', 'category', 'description', 'amount', 'price', 'in_active', 'country', 'city', 'street', 'home_number']
 
 
 class OfferSaleChangeForm(forms.ModelForm):
     class Meta:
         model = OfferSale
-        fields = ['title', 'image', 'category', 'description', 'amount', 'price', 'in_activ']
+        fields = ['title', 'image', 'category', 'description', 'amount', 'price', 'in_active', 'country', 'city', 'street', 'home_number']

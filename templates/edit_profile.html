@@ -45,6 +45,14 @@
                 <input type="text" class="form-control" id="city" name="city" maxlength="64" value="{{ user.city }}">
             </div>
             <div class="mb-3">
+                <label for="street" class="form-label">Улица</label>
+                <input type="text" class="form-control" id="street" name="cistreetty" maxlength="64" value="{{ user.street }}">
+            </div>
+            <div class="mb-3">
+                <label for="home_number" class="form-label">Номер дома/строения/здания</label>
+                <input type="text" class="form-control" id="home_number" name="home_number" maxlength="64" value="{{ user.home_number }}">
+            </div>
+            <div class="mb-3">
                 <label for="phone" class="form-label">Номер телефона</label>
                 <input type="tel" class="form-control" id="phone" name="phone" pattern="^\+?[0-9]{1,12}$" maxlength="12" value="{{ user.phone }}">
             </div>

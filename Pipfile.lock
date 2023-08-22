@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "49fcc50a5e8ae5c1585cdfbb31266cdd54ab30f12a262b1888573480ac043626"
+            "sha256": "7f120fb1c98beebf6b8960e2fd976196cf98d4e07ad16b0e7a4db0029954364f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -95,6 +95,14 @@
             "index": "pypi",
             "version": "==4.2.4"
         },
+        "django-leaflet": {
+            "hashes": [
+                "sha256:2f6dc8c7187fd22e62b6f2b7b42eed86920f81bec312aa654981ebe5bc8e0866",
+                "sha256:ea35244539fe298156feafc7f1e2ce63067c8caa2ac6f8344069796b19d1ce9b"
+            ],
+            "index": "pypi",
+            "version": "==0.29.0"
+        },
         "django-multimedia": {
             "hashes": [
                 "sha256:a93252b49966b2deb2decc4ec6661e2c28781868ad356540423e1296c9f2463b",
@@ -118,6 +126,29 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==1.1.0"
+        },
+        "gdal": {
+            "hashes": [
+                "sha256:d16c6dab28eda6c4b1a571e6dc3e3b0fd824a0a6c1cc1947fc7dcb580c9999de"
+            ],
+            "index": "pypi",
+            "version": "==3.7.1.1"
+        },
+        "geographiclib": {
+            "hashes": [
+                "sha256:6b7225248e45ff7edcee32becc4e0a1504c606ac5ee163a5656d482e0cd38734",
+                "sha256:f7f41c85dc3e1c2d3d935ec86660dc3b2c848c83e17f9a9e51ba9d5146a15859"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==2.0"
+        },
+        "geopy": {
+            "hashes": [
+                "sha256:228cd53b6eef699b2289d1172e462a90d5057779a10388a7366291812601187f",
+                "sha256:4a29a16d41d8e56ba8e07310802a1cbdf098eeb6069cc3d6d3068fc770629ffc"
+            ],
+            "index": "pypi",
+            "version": "==2.3.0"
         },
         "kombu": {
             "hashes": [

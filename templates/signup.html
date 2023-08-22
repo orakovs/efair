@@ -42,11 +42,19 @@
             </div>
             <div class="mb-3">
                 <label for="country" class="form-label">Страна</label>
-                <input type="text" class="form-control" id="country" name="country" maxlength="64" value="Казахстан" required>
+                <input type="text" class="form-control" id="country" name="country" maxlength="64" value="{{ user.country }}">
             </div>
             <div class="mb-3">
                 <label for="city" class="form-label">Город</label>
-                <input type="text" class="form-control" id="city" name="city" maxlength="64" required>
+                <input type="text" class="form-control" id="city" name="city" maxlength="64" value="{{ user.city }}">
+            </div>
+            <div class="mb-3">
+                <label for="street" class="form-label">Улица</label>
+                <input type="text" class="form-control" id="street" name="cistreetty" maxlength="64" value="{{ user.street }}">
+            </div>
+            <div class="mb-3">
+                <label for="home_number" class="form-label">Номер дома/строения/здания</label>
+                <input type="text" class="form-control" id="home_number" name="home_number" maxlength="64" value="{{ user.home_number }}">
             </div>
             <div class="mb-3">
                 <label for="phone" class="form-label">Номер телефона</label>

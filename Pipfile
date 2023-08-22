@@ -8,6 +8,9 @@ openpyxl = "*"
 django = "*"
 pillow = "*"
 django-multimedia = "*"
+geopy = "*"
+gdal = "*"
+django-leaflet = "*"
 
 [dev-packages]
 

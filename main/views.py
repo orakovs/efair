@@ -72,24 +72,28 @@ def createOfferView(request):
     return render(request, 'offer_create.html', {'form': form,})
 
 
+@login_required
 def deleteOfferView(request, offer_id):
     offer = get_object_or_404(OfferSale, pk=offer_id)
-    if request.method == 'POST':
-        offer.delete()
-        return redirect('offers_url')
-    return render(request, 'offer_delete.html', {'offer': offer})
+    if request.user == offer.salesman:
+        if request.method == 'POST':
+            offer.delete()
+            return redirect('offers_url')
+        return render(request, 'offer_delete.html', {'offer': offer})
 
 
+@login_required
 def editOfferView(request, offer_id):
     offer = get_object_or_404(OfferSale, pk=offer_id)
-    if request.method == 'POST':
-        form = OfferSaleChangeForm(request.POST, instance=offer)
-        if form.is_valid():
-            form.save()
-            return redirect('offer_url', offer_id=offer_id)
-    else:
-        form = OfferSaleChangeForm(instance=offer)
-    return render(request, 'offer_edit.html', {'form': form, 'offer': offer})
+    if request.user == offer.salesman:
+        if request.method == 'POST':
+            form = OfferSaleChangeForm(request.POST, instance=offer)
+            if form.is_valid():
+                form.save()
+                return redirect('offer_url', offer_id=offer_id)
+        else:
+            form = OfferSaleChangeForm(instance=offer)
+        return render(request, 'offer_edit.html', {'form': form, 'offer': offer})
 
 
 # все что связано с пользователем

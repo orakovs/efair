@@ -12,6 +12,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=128)
     country = models.CharField(max_length=64)
     city = models.CharField(max_length=64)
+    street = models.CharField(max_length=64)
+    home_number = models.CharField(max_length=64)
     phone_regex = RegexValidator(
         regex=r'^\+?1?\d{11}$',
         message='Номер телефона должен быть в международном формате: +77011234567'
@@ -37,10 +39,47 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Category(models.Model):
     name = models.CharField(max_length=64)
+    description = models.TextField(null=True, blank=True)
     
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+    
+    def __str__(self):
+        return self.name
+
+
+class Manufactuter(models.Model):
+    name = models.CharField(max_length=128)
+    description = models.TextField(null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'Производитель'
+        verbose_name_plural = 'Производители'
+    
+    def __str__(self):
+        return self.name
+
+
+class OfferModel(models.Model):
+    name = models.CharField(max_length=128)
+    manufactuter = models.ForeignKey(Manufactuter, on_delete=models.CASCADE)
+    description = models.TextField(null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'Модель'
+        verbose_name_plural = 'Модели'
+    
+    def __str__(self):
+        return self.name
+
+
+class Unit(models.Model):
+    name = models.CharField(max_length=64)
+    
+    class Meta:
+        verbose_name = 'Единица измерения'
+        verbose_name_plural = 'Единицы измерения'
     
     def __str__(self):
         return self.name
@@ -51,15 +90,23 @@ class OfferSale(models.Model):
     image = models.ImageField(upload_to='offer_image', default='img/no_item_image.jpg')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
+    manufactuter = models.ForeignKey(Manufactuter, on_delete=models.CASCADE)
+    offer_model = models.ForeignKey(OfferModel, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField()
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+    condition_new = models.BooleanField(default=True)
     price = models.PositiveIntegerField()
-    datetime = models.DateTimeField(auto_now=True)
-    in_activ = models.BooleanField(default=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    in_active = models.BooleanField(default=True)
     salesman = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    country = models.CharField(max_length=64)
+    city = models.CharField(max_length=64)
+    street = models.CharField(max_length=64)
+    home_number = models.CharField(max_length=64)
 
     class Meta:
-        verbose_name = 'Предложение'
-        verbose_name_plural = 'Предложения'    
+        verbose_name = 'Предложение на продажу'
+        verbose_name_plural = 'Предложения на продажу'    
     
     def __str__(self):
         return self.title
@@ -71,3 +118,10 @@ class OfferBuy(models.Model):
     amount = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
     datetime = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Предложение на покупку'
+        verbose_name_plural = 'Предложения на покупку'    
+    
+    def __str__(self):
+        return self.sale

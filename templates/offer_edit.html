@@ -56,6 +56,22 @@
                 <input class="form-check-input" type="checkbox" value="true" id="flexCheckChecked" name="in_activ" checked>
                 <label class="form-check-label" for="flexCheckChecked">Предложение актуально</label>
             </div>
+            <div class="mb-3">
+                <label for="country" class="form-label">Страна</label>
+                <input type="text" class="form-control" id="country" name="country" maxlength="64" value="{{ user.country }}">
+            </div>
+            <div class="mb-3">
+                <label for="city" class="form-label">Город</label>
+                <input type="text" class="form-control" id="city" name="city" maxlength="64" value="{{ user.city }}">
+            </div>
+            <div class="mb-3">
+                <label for="street" class="form-label">Улица</label>
+                <input type="text" class="form-control" id="street" name="cistreetty" maxlength="64" value="{{ user.street }}">
+            </div>
+            <div class="mb-3">
+                <label for="home_number" class="form-label">Номер дома/строения/здания</label>
+                <input type="text" class="form-control" id="home_number" name="home_number" maxlength="64" value="{{ user.home_number }}">
+            </div>
             <div class="d-grid gap-2 mt-3">
                 <button type="submit" class="btn btn-outline-dark me-2">Сохранить изменения</button>
                 <button type="reset" class="btn btn-outline-dark me-2">Сбросить</button>

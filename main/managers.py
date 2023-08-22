@@ -2,9 +2,9 @@ from django.contrib.auth.base_user import BaseUserManager
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, iin, first_name, last_name, email, country, city, phone, password, **additional_fields):
+    def create_user(self, iin, first_name, last_name, email, country, city, street, home_number, phone, password, **additional_fields):
         if not iin:
-            raise ValueError('Введите имя пользователя')
+            raise ValueError('Введите индивидуальный идентификационный номер пользователя')
         user = self.model(
             iin=iin,
             first_name=first_name,
@@ -12,6 +12,8 @@ class CustomUserManager(BaseUserManager):
             email=email,
             country=country,
             city=city,
+            street=street,
+            home_number=home_number,
             phone=phone,
             **additional_fields
         )

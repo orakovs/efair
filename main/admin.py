@@ -22,8 +22,12 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('iin', 'date_joined',)
     ordering = ('iin', 'date_joined',)
+        
 
-admin.site.register(CustomUser)
+admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Category)
 admin.site.register(OfferSale)
 admin.site.register(OfferBuy)
+admin.site.register(Manufactuter)
+admin.site.register(OfferModel)
+admin.site.register(Unit)
