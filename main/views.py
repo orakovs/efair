@@ -3,16 +3,48 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.urls import reverse
+from django.core.paginator import Paginator
+from django.http import HttpRequest, JsonResponse
 from .forms import *
 from .models import *
 
 
 # все что связано с отображением страниц
-def homeView(request):
-    return render(request, 'home.html')
+def homeView(request):  #, offer_id=None
+    # offer = None
+    offers = OfferSale.objects.all().order_by('-datetime')
+    paginator = Paginator(offers, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'home.html', {'page_obj': page_obj})
+    
+    # data = [{
+    #     'image': offer.image,
+    #     'title': offer.title,
+    #     'description': offer.description,
+    #     'amount': offer.amount,
+    #     'price': offer.price,
+    #     } for offer in offers]
+    
+    # if offer_id is not None:
+    #     offer = get_object_or_404(OfferSale, pk=offer_id)
+    
+    # if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+    #     return JsonResponse(data, safe=False)
+    
+    # return render(request, 'home.html', {'offers': offers, 'offer': offer})
+ 
+
+# def latestOffer(request):
+#     offers = OfferSale.objects.order_by('-datetime')
+#     paginator = Paginator(offers, 3)
+    
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, 'home.html', {'page_obj': page_obj})
 
 
+@login_required(login_url='login_url')
 def cabinetView(request):
     user = request.user
     offers = OfferSale.objects.filter(salesman=user).order_by('-datetime')
@@ -60,6 +92,10 @@ def offerDetailView(request, offer_id):
 
 @login_required
 def createOfferView(request):
+    categories = Category.objects.all()
+    manufactuter = Manufacturer.objects.all()
+    offer_model = OfferModel.objects.all()
+    unit = Unit.objects.all()
     if request.method == 'POST':
         form = OfferSaleCreationForm(request.POST)
         if form.is_valid():
@@ -69,7 +105,14 @@ def createOfferView(request):
             return redirect('cabinet_url')
     else:
         form = OfferSaleCreationForm()
-    return render(request, 'offer_create.html', {'form': form,})
+    context = {
+        'form': form,
+        'categories': categories,
+        'manufacturer': manufactuter,
+        'offer_model': offer_model,
+        'unit': unit,
+        }
+    return render(request, 'offer_create.html', context)
 
 
 @login_required
@@ -85,6 +128,10 @@ def deleteOfferView(request, offer_id):
 @login_required
 def editOfferView(request, offer_id):
     offer = get_object_or_404(OfferSale, pk=offer_id)
+    categories = Category.objects.all()
+    manufacturer = Manufacturer.objects.all()
+    offer_model = OfferModel.objects.all()
+    unit = Unit.objects.all()
     if request.user == offer.salesman:
         if request.method == 'POST':
             form = OfferSaleChangeForm(request.POST, instance=offer)
@@ -93,7 +140,15 @@ def editOfferView(request, offer_id):
                 return redirect('offer_url', offer_id=offer_id)
         else:
             form = OfferSaleChangeForm(instance=offer)
-        return render(request, 'offer_edit.html', {'form': form, 'offer': offer})
+        context = {
+            'form': form,
+            'offer': offer,
+            'categories': categories,
+            'manufacturer': manufacturer,
+            'offer_model': offer_model,
+            'unit': unit,
+            }
+        return render(request, 'offer_edit.html', context)
 
 
 # все что связано с пользователем

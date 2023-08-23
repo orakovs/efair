@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}{{ offer.title }}{% endblock title %}
+{% block title %}Offer Detail{% endblock title %}
 
 {% block content %}
 <div class="container mt-5">
@@ -19,18 +19,27 @@
                     <dl class="row">
                         <dt class="col-sm-3 text-muted">Категория:</dt>
                         <dd class="col-sm-9 text-muted">{{ offer.category.name }}</dd>
+                        <dt class="col-sm-3">Количество:</dt>
+                        <dd class="col-sm-9">{{ offer.amount }} {{ offer.unit.name}}</dd>
+                        <dt class="col-sm-3">Стоимость:</dt>
+                        <dd class="col-sm-9">{{ offer.price }} тенге</dd>
+                        <dt class="col-sm-3">Состояние:</dt>
+                        <dd class="col-sm-9">
+                            {% if offer.condition_new %}
+                            <span>Новое</span>
+                            {% else %}
+                            <span>Бывшее в употреблении</span>
+                            {% endif %}
+                        </dd>
                         <dt class="col-sm-3">Статус:</dt>
                         <dd class="col-sm-9">
-                            {% if offer.in_activ %}
+                            {% if offer.in_active %}
                             <span>Актуально</span>
                             {% else %}
                             <span>Не актуально</span>
                             {% endif %}
                         </dd>
-                        <dt class="col-sm-3">Количество:</dt>
-                        <dd class="col-sm-9">{{ offer.amount }}</dd>
-                        <dt class="col-sm-3">Стоимость:</dt>
-                        <dd class="col-sm-9">{{ offer.price }} тенге</dd>
+                    </dl>
                     <div class="d-grid gap-2 mt-3">
                         {% if user == offer.salesman %}
                             <a class="btn btn-outline-dark" href="{% url 'offer_edit_url' offer.id %}">Редактировать предложение</a>
@@ -47,7 +56,18 @@
             <div class="card-body">
                 <h2>Описание</h2>
                 <p>{{ offer.description }}</p>
-                <p class="text-muted">Дата публикации: {{ offer.datetime }}</p>
+                <dl class="row col-md-8">
+                    <dt class="col-sm-3">Производитель:</dt>
+                    <dd class="col-sm-9">{{ offer.manufacturer.name }}</dd>
+                    <dt class="col-sm-3">Модель:</dt>
+                    <dd class="col-sm-9">{{ offer.offer_model.name }}</dd>
+                    <dt class="col-sm-3">Продавец:</dt>
+                    <dd class="col-sm-9">{{ offer.salesman }}</dd>
+                    <dt class="col-sm-3">Адрес:</dt>
+                    <dd class="col-sm-9">{{ offer.country }}, {{ offer.city }}, {{ offer.street }}, {{ offer.home_number }}</dd>
+                    <dt class="col-sm-3">Дата публикации:</dt>
+                    <dd class="col-sm-9">{{ offer.datetime }}</dd>
+                </dl>
             </div>
         </div>
     </div>

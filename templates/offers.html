@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Кабинет{% endblock title %}
+{% block title %}Offers{% endblock title %}
 
 {% block content %}
 <div class="container mt-5">
@@ -27,7 +27,7 @@
                                     <ul class="list-unstyled">
                                         <li class="list-group-item"><h5><a class="text-decoration-none" href="{% url 'offer_url' offer.id %}">{{ offer.title }}</a></h5></li>
                                         <li class="list-group-item text-muted">Категория: {{ offer.category.name }}</li>
-                                        <li class="list-group-item">Количество: {{ offer.amount }}</li>
+                                        <li class="list-group-item">Количество: {{ offer.amount }} {{ offer.unit }}</li>
                                         <li class="list-group-item">Стоимость: {{ offer.price }} тенге</li>
                                         <li class="list-group-item">Продавец: {{ offer.salesman.first_name }} {{ offer.salesman.last_name }}</li>
                                         <li class="list-group-item">Дата публикации: {{ offer.datetime }}</li>

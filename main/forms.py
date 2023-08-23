@@ -18,10 +18,10 @@ class CustomUserChangeForm(UserChangeForm):
 class OfferSaleCreationForm(forms.ModelForm):
     class Meta:
         model = OfferSale
-        fields = ['title', 'image', 'category', 'description', 'amount', 'price', 'in_active', 'country', 'city', 'street', 'home_number']
+        fields = ['title', 'image', 'category', 'description', 'manufacturer', 'offer_model', 'amount', 'unit', 'price', 'in_active', 'country', 'city', 'street', 'home_number']
 
 
 class OfferSaleChangeForm(forms.ModelForm):
     class Meta:
         model = OfferSale
-        fields = ['title', 'image', 'category', 'description', 'amount', 'price', 'in_active', 'country', 'city', 'street', 'home_number']
+        fields = ['title', 'image', 'category', 'description', 'manufacturer', 'offer_model', 'amount', 'unit', 'price', 'in_active', 'country', 'city', 'street', 'home_number']

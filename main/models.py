@@ -49,7 +49,7 @@ class Category(models.Model):
         return self.name
 
 
-class Manufactuter(models.Model):
+class Manufacturer(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(null=True, blank=True)
     
@@ -63,7 +63,7 @@ class Manufactuter(models.Model):
 
 class OfferModel(models.Model):
     name = models.CharField(max_length=128)
-    manufactuter = models.ForeignKey(Manufactuter, on_delete=models.CASCADE)
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
     
     class Meta:
@@ -90,7 +90,7 @@ class OfferSale(models.Model):
     image = models.ImageField(upload_to='offer_image', default='img/no_item_image.jpg')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
-    manufactuter = models.ForeignKey(Manufactuter, on_delete=models.CASCADE)
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
     offer_model = models.ForeignKey(OfferModel, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField()
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)

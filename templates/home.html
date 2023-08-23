@@ -1,52 +1,139 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Главная{% endblock title %}
+{% block title %}Home{% endblock title %}
 {% block content %}
 
-    <div class="row">
-        <div class="col-md-8">
-        <div class="container">
-        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
-            <ol class="carousel-indicators visually-hidden">
-            <li data-bs-target="#carouselExampleFade" data-bs-slide-to="0" class="active"></li>
-            <li data-bs-target="#carouselExampleFade" data-bs-slide-to="1"></li>
-            <li data-bs-target="#carouselExampleFade" data-bs-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{% static 'img/advertisement1.jpg' %}" class="d-block w-100" alt="Advertisement 1">
-            </div>
-            <div class="carousel-item">
-                <img src="{% static 'img/advertisement2.jpg' %}" class="d-block w-100" alt="Advertisement 2">
-            </div>
-            <div class="carousel-item">
-                <img src="{% static 'img/advertisement3.jpg' %}" class="d-block w-100" alt="Advertisement 3">
-            </div>
-        </div>
-            <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </a>
-        </div>
-        </div>
-        </div>
-        <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-            <h5 class="card-title">Последние новости</h5>
-            <ul class="list-group">
-                <li class="list-group-item">Новость 1</li>
-                <li class="list-group-item">Новость 2</li>
-                <li class="list-group-item">Новость 3</li>
-            </ul>
-            </div>
-        </div>
-        </div>
-        <div id="map" style="height: 400px;"></div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="bg-img z-index-1" id="lottieAnimation" style="width: 500px; height: 500px;"></div>
     </div>
+    <div class="col-sm-8 text-center my-auto">
+        {% if user.is_authenticated %}
+            <h1>Дорогой {{ user.first_name }} {{ user.last_name }}!</h1> 
+            <h2>Добро пожаловать на «Цифровую ярмарку»!</h2>
+        {% else %}
+            <h1>Дорогой Гость!</h1> 
+            <h2>Добро пожаловать на «Цифровую ярмарку»!</h2>
+        {% endif %}
+    </div>
+  
+  <!-- Блок последних товаров -->
+<div class="container mt-5">
+    <h3>Последние предложения | <a class="text-decoration-none" href="{% url 'offers_url'%}">Все предложения</a></h3>
+    <div class="row">
+        {% comment %} <div class="col-md-4" id="latest-offers">
+        </div> {% endcomment %}
+        {% for offer in page_obj %}
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{ offer.image.url }}" class="card-img-top" alt="{{ offer.title }}">
+                <div class="card-body">
+                    <h5 class="card-title text-truncate">{{ offer.title }}</h5>
+                    <p class="card-text text-truncate">{{ offer.description }}</p>
+                    <p class="card-text text-truncate">Количество: {{ offer.amount }} {{ offer.unit }}</p>
+                    <p class="card-text text-truncate">Стоимость: {{ offer.price }} тенге</p>
+                    <a href="{% url 'offer_url' offer.id %}" class="btn btn-outline-dark d-grid gap-2">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="container mt-3">
+            <div class="d-flex justify-content-center">
+                <div class="pagination">
+                    <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; первая</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                    </span>
+            
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+                    {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+  <!-- Блок новостей -->
+  <div class="container mt-5">
+    <h3>Новости</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <!-- ... -->
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <!-- ... -->
+        </div>
+      </div>
+    </div>
+</div>
+  
+<!-- Скрипт для загрузки и воспроизведения Lottie анимации -->
+<script src="https://cdn.jsdelivr.net/npm/lottie-web@5.7.9/dist/lottie.min.js"></script>
+
+<script>
+    const animationContainer = document.getElementById('lottieAnimation');
+    lottie.loadAnimation({
+        container: animationContainer,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '{% static 'doc/hello.json' %}' // Укажите путь к JSON-файлу с анимацией
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        loadLatestOffers();
+  
+        function loadLatestOffers() {
+            $.ajax({
+                url: "{% url 'home_url' %}", // URL для вашего представления AJAX
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    // Очистить содержимое блока
+                    $("#latest-offers").empty();
+    
+                    // Добавить данные последних предложений
+                    data.forEach(function(offer) {
+                        var offerHTML = '<div class="card">';
+                        offerHTML += '<img src="' + offer.image_url + '" class="card-img-top" alt="' + offer.title + '">';
+                        offerHTML += '<div class="card-body">';
+                        offerHTML += '<h5 class="card-title text-truncate">' + offer.title + '</h5>';
+                        offerHTML += '<p class="card-text text-truncate">' + offer.description + '</p>';
+                        offerHTML += '<p class="card-text text-truncate">Количество: ' + offer.amount + ' ' + offer.unit + '</p>';
+                        offerHTML += '<p class="card-text text-truncate">Стоимость: ' + offer.price + ' тенге</p>';
+                        offerHTML += '<a href="#" class="btn btn-outline-dark d-grid gap-2" data-offer-url="{% url 'offer_url' 0 %}" data-offer-id="' + offer.id + '">Подробнее</a>';
+                        offerHTML += '</div>';
+                        offerHTML += '</div>';
+                        $("#latest-offers").append(offerHTML);
+                    });
+                },
+                error: function() {
+                    console.log("Произошла ошибка при загрузке данных");
+                }
+            });
+        }
+        
+        // При клике на кнопку "Подробнее"
+        $(document).on("click", ".btn[data-offer-id]", function(event) {
+            event.preventDefault();
+            var offerId = $(this).data("offer-id");
+            var offerUrl = $(this).data("offer-url").replace("0", offerId);
+            window.location.href = offerUrl;
+        });
+    });
+</script>
+
+
 {% endblock content %}
 
