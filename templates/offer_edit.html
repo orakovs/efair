@@ -22,7 +22,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
         <h2 class="mb-4">Изменение предложения на продажу</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container">
                 <div class="row">
@@ -32,33 +32,32 @@
                     </div>
                     <div class="mb-3">
                         <label for="image" class="form-label">Изображение</label>
-                        <input type="file" class="form-control" id="image" name="image">
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
                     </div>
                     <div class="mb-3">
                         <label for="category" class="form-label">Категория</label>
                         <select class="form-control" id="category" name="category">
-                            {% for category in form.fields.category.choices %}
-                            <option value="{{ offer.category.name }}" {% if category.0 == offer.category.pk %}selected{% endif %}>{{ category.1 }}</option>
+                            {% for category_id, category_name in form.fields.category.choices %}
+                            <option value="{{ category_id }}" {% if category_id == offer.category.pk %}selected{% endif %}>{{ category_name }}</option>
                             {% endfor %}
                         </select>
-                    </div>            
+                    </div>                    
                     <div class="mb-3">
                         <label for="manufacturer" class="form-label">Производитель</label>
                         <select class="form-control" id="manufacturer" name="manufacturer">
-                            {% for manufacturer in form.fields.manufacturer.choices %}
-                            <option value="{{ offer.manufacturer.name }}" {% if manufacturer.0 == offer.manufacturer.pk %}selected{% endif %}>{{ manufacturer.1 }}</option>
+                            {% for manufacturer_id, manufacturer_name in form.fields.manufacturer.choices %}
+                            <option value="{{ manufacturer_id }}" {% if manufacturer_id == offer.manufacturer.pk %}selected{% endif %}>{{ manufacturer_name }}</option>
                             {% endfor %}
                         </select>
-                    </div>
-                    
+                    </div>                    
                     <div class="mb-3">
                         <label for="offer_model" class="form-label">Модель</label>
                         <select class="form-control" id="offer_model" name="offer_model">
-                            {% for offer_model in form.fields.offer_model.choices %}
-                            <option value="{{ offer.offer_model.name }}" {% if offer_model.0 == offer.offer_model.pk %}selected{% endif %}>{{ offer_model.1 }}</option>
+                            {% for offer_model_id, offer_model_name in form.fields.offer_model.choices %}
+                            <option value="{{ offer_model_id }}" {% if offer_model_id == offer.offer_model.pk %}selected{% endif %}>{{ offer_model_name }}</option>
                             {% endfor %}
                         </select>
-                    </div>                                     
+                    </div>                                                      
                     <div class="mb-3">
                         <label for="description" class="form-label">Описание</label>
                         <input type="textarea" class="form-control" id="description" name="description" value="{{ offer.description }}">
@@ -74,11 +73,11 @@
                     <div class="col-md-4 mb-3">
                         <label for="unit" class="form-label">Ед.изм.</label>
                         <select class="form-control" id="unit" name="unit">
-                            {% for unit in form.fields.unit.choices %}
-                            <option value="{{ offer.unit.name }}" {% if unit.0 == offer.unit.pk %}selected{% endif %}>{{ unit.1 }}</option>
+                            {% for unit_id, unit_name in form.fields.unit.choices %}
+                            <option value="{{ unit_id }}" {% if unit_id == offer.unit.pk %}selected{% endif %}>{{ unit_name }}</option>
                             {% endfor %}
                         </select>
-                    </div>
+                    </div>                    
                     <div class="col-md-4 mb-3">
                         <label for="price" class="form-label">Стоимость</label>
                         <input type="text" class="form-control" id="price" name="price" maxlength="64" value="{{ offer.price }}">

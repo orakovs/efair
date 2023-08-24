@@ -13,7 +13,7 @@ from .models import *
 def homeView(request):  #, offer_id=None
     # offer = None
     offers = OfferSale.objects.all().order_by('-datetime')
-    paginator = Paginator(offers, 3)
+    paginator = Paginator(offers, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'home.html', {'page_obj': page_obj})
@@ -48,10 +48,12 @@ def homeView(request):  #, offer_id=None
 def cabinetView(request):
     user = request.user
     offers = OfferSale.objects.filter(salesman=user).order_by('-datetime')
+    for offer in offers:
+        offer.count = len(OfferBuy.objects.filter(sale=offer).filter(in_active=True))
     context = {
         'user': user,
         'this_url': 'cabinet_url',
-        'offers': offers
+        'offers': offers,
     }
     return render(request, 'cabinet.html', context)
 
@@ -92,12 +94,8 @@ def offerDetailView(request, offer_id):
 
 @login_required
 def createOfferView(request):
-    categories = Category.objects.all()
-    manufactuter = Manufacturer.objects.all()
-    offer_model = OfferModel.objects.all()
-    unit = Unit.objects.all()
     if request.method == 'POST':
-        form = OfferSaleCreationForm(request.POST)
+        form = OfferSaleCreationForm(request.POST, request.FILES)
         if form.is_valid():
             offer = form.save(commit=False)
             offer.salesman = request.user
@@ -107,10 +105,6 @@ def createOfferView(request):
         form = OfferSaleCreationForm()
     context = {
         'form': form,
-        'categories': categories,
-        'manufacturer': manufactuter,
-        'offer_model': offer_model,
-        'unit': unit,
         }
     return render(request, 'offer_create.html', context)
 
@@ -128,13 +122,9 @@ def deleteOfferView(request, offer_id):
 @login_required
 def editOfferView(request, offer_id):
     offer = get_object_or_404(OfferSale, pk=offer_id)
-    categories = Category.objects.all()
-    manufacturer = Manufacturer.objects.all()
-    offer_model = OfferModel.objects.all()
-    unit = Unit.objects.all()
     if request.user == offer.salesman:
         if request.method == 'POST':
-            form = OfferSaleChangeForm(request.POST, instance=offer)
+            form = OfferSaleChangeForm(request.POST, request.FILES, instance=offer)
             if form.is_valid():
                 form.save()
                 return redirect('offer_url', offer_id=offer_id)
@@ -143,12 +133,50 @@ def editOfferView(request, offer_id):
         context = {
             'form': form,
             'offer': offer,
-            'categories': categories,
-            'manufacturer': manufacturer,
-            'offer_model': offer_model,
-            'unit': unit,
             }
         return render(request, 'offer_edit.html', context)
+
+
+def createOfferBuyView(request, offer_id):
+    offer = get_object_or_404(OfferSale, pk=offer_id)
+    
+    if request.method == 'POST':
+        form = OfferBuyForm(request.POST)
+        if form.is_valid():
+            offer_buy = form.save(commit=False)
+            offer_buy.sale = offer
+            offer_buy.buyer = request.user
+            offer_buy.save()
+            return redirect('offers_url')  # Измените на нужный URL
+    else:
+        form = OfferBuyForm()
+    
+    context = {'form': form, 'offer': offer}
+    return render(request, 'offer_buy_create.html', context)
+
+
+def offerBuyView(request, offer_id):
+    offer_sale = get_object_or_404(OfferSale, pk=offer_id)
+    offers_buy = OfferBuy.objects.filter(sale=offer_sale).filter(in_active=True).order_by('-datetime')
+    
+    return render(request, 'offers_buy.html', {'offers_buy': offers_buy})
+
+
+def offerAccept(request):
+    if request.method == 'POST':
+        offer_buy = OfferBuy.objects.get(id=request.POST.get('offer_buy_id'))
+        offer_sale = OfferSale.objects.get(id=request.POST.get('offer_buy_id'))
+        offer_buy.in_active = False
+        offer_buy.save()
+    return redirect('offers_buy_url', offer_id=request.POST.get('offer_sale_id'))
+
+
+def offerDecline(request):
+    if request.method == 'POST':
+        offer = OfferBuy.objects.get(id=request.POST.get('offer_buy_id'))
+        offer.in_active = False
+        offer.save()
+    return redirect('cabinet_url')
 
 
 # все что связано с пользователем
@@ -183,6 +211,8 @@ def signupView(request):
         email = request.POST.get('email')
         country = request.POST.get('country')
         city = request.POST.get('city')
+        street = request.POST.get('street')
+        home_number = request.POST.get('home_number')
         phone = request.POST.get('phone')
         avatar = request.POST.get('avatar')
         password1 = request.POST.get('password1')
@@ -202,6 +232,8 @@ def signupView(request):
             email=email,
             country=country,
             city=city,
+            street=street,
+            home_number= home_number,
             phone=phone,
             password=password1
             )
@@ -210,7 +242,7 @@ def signupView(request):
     
     else:
         form = CustomUserCreationForm()
-        return render(request, 'signup.html', {'form': form})
+        return render(request, 'signup.html', {'form': form,})
 
 @login_required
 def editProfileView(request):

@@ -22,7 +22,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
         <h2 class="mb-4">Редактирование данных пользователя</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="first_name" class="form-label">Имя</label>
@@ -46,7 +46,7 @@
             </div>
             <div class="mb-3">
                 <label for="street" class="form-label">Улица</label>
-                <input type="text" class="form-control" id="street" name="cistreetty" maxlength="64" value="{{ user.street }}">
+                <input type="text" class="form-control" id="street" name="street" maxlength="64" value="{{ user.street }}">
             </div>
             <div class="mb-3">
                 <label for="home_number" class="form-label">Номер дома/строения/здания</label>
@@ -58,7 +58,7 @@
             </div>
             <div class="mb-3">
                 <label for="avatar" class="form-label">Фото профиля</label>
-                <input type="file" class="form-control" id="avatar" name="avatar">
+                <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
             </div>
             <div class="mb-3">
                 <label for="password1" class="form-label">Пароль</label>

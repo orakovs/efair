@@ -87,7 +87,7 @@ class Unit(models.Model):
 
 class OfferSale(models.Model):
     title = models.CharField(max_length=64)
-    image = models.ImageField(upload_to='offer_image', default='img/no_item_image.jpg')
+    image = models.ImageField(upload_to='img/offer_image', default='img/no_item_image.jpg')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(null=True, blank=True)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
@@ -117,6 +117,7 @@ class OfferBuy(models.Model):
     buyer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
+    in_active = models.BooleanField(default=True)
     datetime = models.DateTimeField(auto_now=True)
     
     class Meta:
@@ -124,4 +125,4 @@ class OfferBuy(models.Model):
         verbose_name_plural = 'Предложения на покупку'    
     
     def __str__(self):
-        return self.sale
+        return self.sale.title

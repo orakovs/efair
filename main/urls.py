@@ -17,6 +17,10 @@ urlpatterns = [
     path('create_offer', createOfferView, name='offer_create_url'),
     path('edit_offer/<int:offer_id>', editOfferView, name='offer_edit_url'),
     path('delete_offer/<int:offer_id>', deleteOfferView, name='offer_delete_url'),
+    path('create_offer_buy/<int:offer_id>', createOfferBuyView, name='create_offer_buy_url'),
+    path('offers_buy/<int:offer_id>', offerBuyView, name='offers_buy_url'),
+    path('offer_decline', offerDecline, name='offers_decline_url'),
+    path('offer_accept', offerAccept, name='offers_accept_url'),
 ]
 
 if settings.DEBUG:

@@ -4,16 +4,16 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-4">
-        <div class="bg-img z-index-1" id="lottieAnimation" style="width: 500px; height: 500px;"></div>
+    <div class="col-sm-4 my-auto">
+        <div class="bg-img" id="lottieAnimation" style="width: 600px; height: 600px;"></div>
     </div>
     <div class="col-sm-8 text-center my-auto">
         {% if user.is_authenticated %}
-            <h1>Дорогой {{ user.first_name }} {{ user.last_name }}!</h1> 
-            <h2>Добро пожаловать на «Цифровую ярмарку»!</h2>
+            <h2>Добро пожаловать на «Цифровую ярмарку»!</h2> 
+            <h1>{{ user.first_name }} {{ user.last_name }}</h1>
         {% else %}
-            <h1>Дорогой Гость!</h1> 
-            <h2>Добро пожаловать на «Цифровую ярмарку»!</h2>
+            <h2>Добро пожаловать на «Цифровую ярмарку»!</h2> 
+            <h1></h1>
         {% endif %}
     </div>
   
@@ -24,7 +24,7 @@
         {% comment %} <div class="col-md-4" id="latest-offers">
         </div> {% endcomment %}
         {% for offer in page_obj %}
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card">
                 <img src="{{ offer.image.url }}" class="card-img-top" alt="{{ offer.title }}">
                 <div class="card-body">
@@ -42,8 +42,8 @@
                 <div class="pagination">
                     <span class="step-links">
                     {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; первая</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+                        <a class="text-decoration-none" href="?page=1">&laquo; первая</a>
+                        <a class="text-decoration-none" href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
                     {% endif %}
             
                     <span class="current">
@@ -51,8 +51,8 @@
                     </span>
             
                     {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">следующая</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+                        <a class="text-decoration-none" href="?page={{ page_obj.next_page_number }}">следующая</a>
+                        <a class="text-decoration-none" href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
                     {% endif %}
                     </span>
                 </div>

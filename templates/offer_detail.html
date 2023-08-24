@@ -8,7 +8,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <img src="{{ offer.image.url }}" class="img-fluid" alt="Product Image">
+                    <img src="{% if offer.image %}{{ offer.image.url }}{% else %}{% static 'img/no_item_image.jpg' %}{% endif %}" class="img-fluid" alt="Product Image">
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                             <a class="btn btn-outline-dark" href="{% url 'offer_edit_url' offer.id %}">Редактировать предложение</a>
                             <a class="btn btn-outline-dark" href="{% url 'offer_delete_url' offer.id %}">Удалить предложение</a>
                         {% endif %}
-                        <a class="btn btn-outline-dark" href="#">Сделать предложение</a>
+                        <a class="btn btn-outline-dark" href="{% url 'create_offer_buy_url' offer.id %}">Сделать предложение</a>
                     </div>
                 </div>
             </div>
