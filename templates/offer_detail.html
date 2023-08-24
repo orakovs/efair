@@ -22,7 +22,7 @@
                         <dt class="col-sm-3">Количество:</dt>
                         <dd class="col-sm-9">{{ offer.amount }} {{ offer.unit.name}}</dd>
                         <dt class="col-sm-3">Стоимость:</dt>
-                        <dd class="col-sm-9">{{ offer.price }} тенге</dd>
+                        <dd class="col-sm-9" id="price">{{ offer.price }} KZT |</dd>
                         <dt class="col-sm-3">Состояние:</dt>
                         <dd class="col-sm-9">
                             {% if offer.condition_new %}
@@ -72,4 +72,22 @@
         </div>
     </div>
 </div>
+<script>
+    window.onload=()=>{
+        var kzt={{ offer.price }};
+        var request=new XMLHttpRequest();
+
+        request.onreadystatechange=function() {
+            if(request.readyState == 4){
+                var price=document.getElementById('price');
+                var response=JSON.parse(request.responseText);
+                price.innerHTML=response['old_amount'] + ' KZT | ' + response['new_amount'] + ' USD';
+            }
+        };
+        var url='https://api.api-ninjas.com/v1/convertcurrency?want=USD&have=KZT&amount=' + kzt;
+        request.open('get', url, true);
+        request.setRequestHeader('X-Api-Key', 'MncbwUDMbimwWA35l1yoVA==WeF7lepobbYVn4T3');
+        request.send();
+    }
+</script>
 {% endblock %}

@@ -10,38 +10,13 @@ from .models import *
 
 
 # все что связано с отображением страниц
-def homeView(request):  #, offer_id=None
-    # offer = None
+def homeView(request):
+
     offers = OfferSale.objects.all().order_by('-datetime')
     paginator = Paginator(offers, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'home.html', {'page_obj': page_obj})
-    
-    # data = [{
-    #     'image': offer.image,
-    #     'title': offer.title,
-    #     'description': offer.description,
-    #     'amount': offer.amount,
-    #     'price': offer.price,
-    #     } for offer in offers]
-    
-    # if offer_id is not None:
-    #     offer = get_object_or_404(OfferSale, pk=offer_id)
-    
-    # if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-    #     return JsonResponse(data, safe=False)
-    
-    # return render(request, 'home.html', {'offers': offers, 'offer': offer})
- 
-
-# def latestOffer(request):
-#     offers = OfferSale.objects.order_by('-datetime')
-#     paginator = Paginator(offers, 3)
-    
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#     return render(request, 'home.html', {'page_obj': page_obj})
 
 
 @login_required(login_url='login_url')
@@ -165,11 +140,21 @@ def offerBuyView(request, offer_id):
 def offerAccept(request):
     if request.method == 'POST':
         offer_buy = OfferBuy.objects.get(id=request.POST.get('offer_buy_id'))
-        offer_sale = OfferSale.objects.get(id=request.POST.get('offer_buy_id'))
+        offer_sale = OfferSale.objects.get(id=request.POST.get('offer_sale_id'))
         offer_buy.in_active = False
         offer_buy.save()
-    return redirect('offers_buy_url', offer_id=request.POST.get('offer_sale_id'))
-
+        if offer_sale.amount - offer_buy.amount == 0:
+            offer_sale.in_active = False
+            offer_sale.save()
+        else:
+            offer_sale.amount -= offer_buy.amount
+            offer_sale.save()
+        context = {
+            'offer_sale': offer_sale,
+            'offer_buy': offer_buy,
+        }
+        return render(request, 'contract.html', context)
+    
 
 def offerDecline(request):
     if request.method == 'POST':
@@ -177,6 +162,7 @@ def offerDecline(request):
         offer.in_active = False
         offer.save()
     return redirect('cabinet_url')
+
 
 
 # все что связано с пользователем
