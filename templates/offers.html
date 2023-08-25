@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <div class="d-grid gap-2">
                         <form class="input-group" method="GET">
-                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="q" value="{{ search_query }}">
+                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="q">
                             <button type="submit" class="btn btn-outline-primary">search</button>
                         </form>
                         <div class="d-grid gap-2">
@@ -25,10 +25,10 @@
                             <div class="card-body">
                                 <div class="d-grid gap-2">
                                     <ul class="list-unstyled">
-                                        <li class="list-group-item"><h5><a class="text-decoration-none" href="{% url 'offer_url' offer.id %}">{{ offer.title }}</a></h5></li>
+                                        <li class="list-group-item"><h5><a class="text-decoration-none" href="{% url 'offer_url' offer.id %}">{{ offer.title }} {{ offer.manufacturer }} {{ offer.offer_model }}</a></h5></li>
                                         <li class="list-group-item text-muted">Категория: {{ offer.category.name }}</li>
                                         <li class="list-group-item">Количество: {{ offer.amount }} {{ offer.unit }}</li>
-                                        <li class="list-group-item">Стоимость: {{ offer.price }} тенге</li>
+                                        <li class="list-group-item">Стоимость за {{ offer.unit }}: {{ offer.price }} тенге</li>
                                         <li class="list-group-item">Продавец: {{ offer.salesman.first_name }} {{ offer.salesman.last_name }}</li>
                                         <li class="list-group-item">Дата публикации: {{ offer.datetime }}</li>
                                     </ul>

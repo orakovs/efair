@@ -21,6 +21,9 @@ urlpatterns = [
     path('offers_buy/<int:offer_id>', offerBuyView, name='offers_buy_url'),
     path('offer_decline', offerDecline, name='offers_decline_url'),
     path('offer_accept', offerAccept, name='offers_accept_url'),
+    path('news/<int:news_id>', newsDetailView, name='news_url'),
+    path('delete_user/<int:user_id>', deleteCustomUserView, name='user_delete_url'),
+
 ]
 
 if settings.DEBUG:

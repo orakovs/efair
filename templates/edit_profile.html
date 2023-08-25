@@ -71,6 +71,7 @@
             <div class="d-grid gap-2 mt-3">
                 <button type="submit" class="btn btn-outline-dark">Сохранить изменения</button>
                 <button type="reset" class="btn btn-outline-dark">Сбросить</button>
+                <a href="{% url 'user_delete_url' user.id %}" class="btn btn-outline-dark">Удалить профиль</a>
                 <a href="{% url 'cabinet_url' %}" class="btn btn-outline-dark">Закрыть</a>      
             </div>
         </form>

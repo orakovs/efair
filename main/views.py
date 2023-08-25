@@ -4,19 +4,23 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
-from django.http import HttpRequest, JsonResponse
 from .forms import *
 from .models import *
 
 
 # все что связано с отображением страниц
 def homeView(request):
-
     offers = OfferSale.objects.all().order_by('-datetime')
+    news = News.objects.all().order_by('-datetime')
     paginator = Paginator(offers, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'home.html', {'page_obj': page_obj})
+    
+    context = {
+        'page_obj': page_obj,
+        'news': news,
+    }
+    return render(request, 'home.html', context)
 
 
 @login_required(login_url='login_url')
@@ -67,7 +71,7 @@ def offerDetailView(request, offer_id):
     return render(request, 'offer_detail.html', context)
 
 
-@login_required
+@login_required(login_url='login_url')
 def createOfferView(request):
     if request.method == 'POST':
         form = OfferSaleCreationForm(request.POST, request.FILES)
@@ -84,7 +88,7 @@ def createOfferView(request):
     return render(request, 'offer_create.html', context)
 
 
-@login_required
+@login_required(login_url='login_url')
 def deleteOfferView(request, offer_id):
     offer = get_object_or_404(OfferSale, pk=offer_id)
     if request.user == offer.salesman:
@@ -94,7 +98,7 @@ def deleteOfferView(request, offer_id):
         return render(request, 'offer_delete.html', {'offer': offer})
 
 
-@login_required
+@login_required(login_url='login_url')
 def editOfferView(request, offer_id):
     offer = get_object_or_404(OfferSale, pk=offer_id)
     if request.user == offer.salesman:
@@ -111,7 +115,7 @@ def editOfferView(request, offer_id):
             }
         return render(request, 'offer_edit.html', context)
 
-
+@login_required(login_url='login_url')
 def createOfferBuyView(request, offer_id):
     offer = get_object_or_404(OfferSale, pk=offer_id)
     
@@ -122,7 +126,7 @@ def createOfferBuyView(request, offer_id):
             offer_buy.sale = offer
             offer_buy.buyer = request.user
             offer_buy.save()
-            return redirect('offers_url')  # Измените на нужный URL
+            return redirect('offers_url')
     else:
         form = OfferBuyForm()
     
@@ -137,6 +141,7 @@ def offerBuyView(request, offer_id):
     return render(request, 'offers_buy.html', {'offers_buy': offers_buy})
 
 
+@login_required(login_url='login_url')
 def offerAccept(request):
     if request.method == 'POST':
         offer_buy = OfferBuy.objects.get(id=request.POST.get('offer_buy_id'))
@@ -155,7 +160,7 @@ def offerAccept(request):
         }
         return render(request, 'contract.html', context)
     
-
+@login_required(login_url='login_url')
 def offerDecline(request):
     if request.method == 'POST':
         offer = OfferBuy.objects.get(id=request.POST.get('offer_buy_id'))
@@ -163,6 +168,13 @@ def offerDecline(request):
         offer.save()
     return redirect('cabinet_url')
 
+
+def newsDetailView(request, news_id):
+    news = get_object_or_404(News, pk=news_id)
+    context = {
+        'news': news
+        }
+    return render(request, 'news_detail.html', context)
 
 
 # все что связано с пользователем
@@ -230,7 +242,7 @@ def signupView(request):
         form = CustomUserCreationForm()
         return render(request, 'signup.html', {'form': form,})
 
-@login_required
+@login_required(login_url='login_url')
 def editProfileView(request):
     user = request.user
     if request.method == 'POST':
@@ -241,3 +253,12 @@ def editProfileView(request):
     else:
         form = CustomUserChangeForm(instance=user)
     return render(request, 'edit_profile.html', {'form': form})
+
+@login_required(login_url='login_url')
+def deleteCustomUserView(request, user_id):
+    user = get_object_or_404(CustomUser, pk=user_id)
+    if request.user == user:
+        if request.method == 'POST':
+            user.delete()
+            return redirect('home_url')
+        return render(request, 'user_delete.html', {'user': user})

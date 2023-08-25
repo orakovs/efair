@@ -22,7 +22,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
         <h2 class="mb-4">Создание предложения на продажу</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container">
                 <div class="row">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="image" class="form-label">Изображение</label>
-                        <input type="file" class="form-control" id="image" name="image">
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
                     </div>
                     <div class="mb-3">
                         <label for="category" class="form-label">Категория</label>

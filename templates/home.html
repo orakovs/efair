@@ -17,21 +17,18 @@
         {% endif %}
     </div>
   
-  <!-- Блок последних товаров -->
 <div class="container mt-5">
     <h3>Последние предложения | <a class="text-decoration-none" href="{% url 'offers_url'%}">Все предложения</a></h3>
     <div class="row">
-        {% comment %} <div class="col-md-4" id="latest-offers">
-        </div> {% endcomment %}
         {% for offer in page_obj %}
-        <div class="col-md-3">
+        <div class="col-md-3 mt-3">
             <div class="card">
                 <img src="{{ offer.image.url }}" class="card-img-top" alt="{{ offer.title }}">
                 <div class="card-body">
                     <h5 class="card-title text-truncate">{{ offer.title }}</h5>
-                    <p class="card-text text-truncate">{{ offer.description }}</p>
+                    <p class="card-text text-truncate">{{ offer.manufacturer }} {{ offer.offer_model }}</p>
                     <p class="card-text text-truncate">Количество: {{ offer.amount }} {{ offer.unit }}</p>
-                    <p class="card-text text-truncate">Стоимость: {{ offer.price }} тенге</p>
+                    <p class="card-text text-truncate">Стоимость за {{ offer.unit }}: {{ offer.price }} KZT</p>
                     <a href="{% url 'offer_url' offer.id %}" class="btn btn-outline-dark d-grid gap-2">Подробнее</a>
                 </div>
             </div>
@@ -47,7 +44,7 @@
                     {% endif %}
             
                     <span class="current">
-                        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
                     </span>
             
                     {% if page_obj.has_next %}
@@ -58,24 +55,25 @@
                 </div>
             </div>
         </div>
-  <!-- Блок новостей -->
-  <div class="container mt-5">
+<div class="container mt-5">
     <h3>Новости</h3>
     <div class="row">
-      <div class="col-md-6">
-        <div class="card">
-          <!-- ... -->
+        {% for news in news %}
+        <div class="col-md-6 mt-3">
+            <div class="card">
+                <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}">
+                <div class="card-body">
+                    <h5 class="card-title text-truncate">{{ news.title }}</h5>
+                    <p class="card-text text-truncate">{{ news.body }}</p>
+                    <p class="card-text text-muted small text-truncate">{{ news.datetime }}</p>
+
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card">
-          <!-- ... -->
-        </div>
-      </div>
+        {% endfor %}
     </div>
 </div>
   
-<!-- Скрипт для загрузки и воспроизведения Lottie анимации -->
 <script src="https://cdn.jsdelivr.net/npm/lottie-web@5.7.9/dist/lottie.min.js"></script>
 
 <script>
@@ -85,7 +83,7 @@
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: '{% static 'doc/hello.json' %}' // Укажите путь к JSON-файлу с анимацией
+        path: '{% static 'doc/hello.json' %}'
     });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -96,14 +94,12 @@
   
         function loadLatestOffers() {
             $.ajax({
-                url: "{% url 'home_url' %}", // URL для вашего представления AJAX
+                url: "{% url 'home_url' %}",
                 method: "GET",
                 dataType: "json",
                 success: function(data) {
-                    // Очистить содержимое блока
                     $("#latest-offers").empty();
     
-                    // Добавить данные последних предложений
                     data.forEach(function(offer) {
                         var offerHTML = '<div class="card">';
                         offerHTML += '<img src="' + offer.image_url + '" class="card-img-top" alt="' + offer.title + '">';
@@ -124,7 +120,6 @@
             });
         }
         
-        // При клике на кнопку "Подробнее"
         $(document).on("click", ".btn[data-offer-id]", function(event) {
             event.preventDefault();
             var offerId = $(this).data("offer-id");
@@ -133,7 +128,6 @@
         });
     });
 </script>
-
 
 {% endblock content %}
 
