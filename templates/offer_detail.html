@@ -64,14 +64,42 @@
                     <dt class="col-sm-3">Продавец:</dt>
                     <dd class="col-sm-9">{{ offer.salesman }}</dd>
                     <dt class="col-sm-3">Адрес:</dt>
-                    <dd class="col-sm-9">{{ offer.country }}, {{ offer.city }}, {{ offer.street }}, {{ offer.home_number }}</dd>
+                    <dd class="col-sm-9" id="address">
+                        <a href="#" class="link-offset-2 link-underline link-underline-opacity-0" data-toggle="modal" data-target="#mapModal">{{ offer.country }}, {{ offer.city }}, {{ offer.street }}, {{ offer.home_number }}</a>
+                    </dd>
                     <dt class="col-sm-3">Дата публикации:</dt>
                     <dd class="col-sm-9">{{ offer.datetime }}</dd>
                 </dl>
+                <div id="map"></div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Подключение jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Модальное окно для предпросмотра -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewModalLabel">Предпросмотр</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Вывод адреса и ссылки на карту -->
+                <p>Адрес: <span id="address">{{ offer.country }}, {{ offer.city }}, {{ offer.street }}, {{ offer.home_number }}</span></p>
+                <p>Посмотреть на карте: <a href="#" id="mapLink">Открыть карту</a></p>
+                <div id="map" style="width: 100%; height: 300px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     window.onload=()=>{
         var kzt={{ offer.price }};
@@ -90,4 +118,41 @@
         request.send();
     }
 </script>
+
+<script src="https://api-maps.yandex.ru/2.1/?apikey=69e2026c-74bf-450d-8b2c-c17c3e2f1611&lang=ru_RU"></script>
+
+<!-- Скрипт для предпросмотра в модальном окне -->
+<script>
+    jQuery(document).ready(function() {
+        jQuery('[data-toggle="modal"]').on('click', function() {
+            const addressElement = document.getElementById("address");
+            const addressText = addressElement.textContent.trim();
+
+            ymaps.ready(function() {
+                const geocoder = ymaps.geocode(addressText);
+
+                geocoder.then(function(res) {
+                    const coords = res.geoObjects.get(0).geometry.getCoordinates();
+
+                    // Создаем карту и метку
+                    const map = new ymaps.Map('map', {
+                        center: coords,
+                        zoom: 16
+                    });
+
+                    const placemark = new ymaps.Placemark(coords);
+                    map.geoObjects.add(placemark);
+
+                    // Обновляем ссылку на карту в модальном окне
+                    const mapLink = document.getElementById("mapLink");
+                    mapLink.setAttribute("href", `https://yandex.com/maps/?pt=${coords[1]},${coords[0]}&z=16`);
+
+                    // Открываем модальное окно
+                    $('#previewModal').modal('show');
+                });
+            });
+        });
+    });
+</script>
+
 {% endblock %}
